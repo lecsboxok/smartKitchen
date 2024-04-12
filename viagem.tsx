@@ -1,67 +1,13 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform, StatusBar, ScrollView, ActivityIndicator, Alert, Keyboard } from 'react-native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react'
-import Music from './music';
-import Viagem from './viagem';
-import Livro from './livro';
-
-
-const Tab = createMaterialBottomTabNavigator();
-
 
 const alturaStatusBar = StatusBar.currentHeight;
 const KEY_GPT = '';
 //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
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Receita" 
-          component={Receita} 
-          options={{
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="restaurant" size={24} color="black" />
-            )
-          }} 
-        />
-        <Tab.Screen 
-          name="Music" 
-          component={Music} 
-          options={{
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="music-note" color={color} size={24} />
-            )
-          }} 
-        />
-        <Tab.Screen 
-          name="Viagem" 
-          component={Viagem} 
-          options={{
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="flight" color={color} size={24} />
-            )
-          }} 
-        />
-        <Tab.Screen 
-          name="Livro" 
-          component={Livro} 
-          options={{
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="book" size={24} color="black" />
-            )
-          }} 
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
 
-
-function Receita() {
+export default function Viagem() {
 
   const [load, defLoad] = useState(false);
   const [receita, defReceita] = useState("");
@@ -70,18 +16,17 @@ function Receita() {
   const [ingr2, defIngr2] = useState("");
   const [ingr3, defIngr3] = useState("");
   const [ingr4, defIngr4] = useState("");
-  const [ocasiao, defOcasiao] = useState("");
 
   async function gerarReceita() {
-    if (ingr1 === "" || ingr2 === "" || ingr3 === "" || ingr4 === "" || ocasiao === "") {
-      Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }])
+    if (ingr1 === "" || ingr2 === "" || ingr3 === "" || ingr4 === "") {
+      Alert.alert("Atenção", "Informe todos os elementos!", [{ text: "Beleza!" }])
       return;
     }
     defReceita("");
     defLoad(true);
     Keyboard.dismiss();
 
-    const prompt = `Sugira uma receita detalhada para o ${ocasiao} usando os ingredientes: ${ingr1}, ${ingr2}, ${ingr3} e ${ingr4} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
+    const prompt = `Sugira uma ideia de lugares para viajar seguindo os seguintes critérios: ${ingr1}, ${ingr2}, ${ingr3} e ${ingr4} e pesquise um tour pelo local no YouTube. Caso encontre, informe o link.`;
 
     fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -123,38 +68,32 @@ function Receita() {
   return (
     <View style={ESTILOS.container}>
       <StatusBar barStyle="dark-content" translucent={true} backgroundColor="#F1F1F1" />
-      <Text style={ESTILOS.header}>Cozinha fácil</Text>
+      <Text style={ESTILOS.header}>Viajar nunca ficou tão fácil!</Text>
       <View style={ESTILOS.form}>
-        <Text style={ESTILOS.label}>Insira os ingredientes abaixo:</Text>
+        <Text style={ESTILOS.label}>Insira os itens abaixo:</Text>
         <TextInput
-          placeholder="Ingrediente 1"
+          placeholder="Lugar rural ou urbano"
           style={ESTILOS.input}
           value={ingr1}
           onChangeText={(texto) => defIngr1(texto)}
         />
         <TextInput
-          placeholder="Ingrediente 2"
+          placeholder="Interesse"
           style={ESTILOS.input}
           value={ingr2}
           onChangeText={(texto) => defIngr2(texto)}
         />
         <TextInput
-          placeholder="Ingrediente 3"
+          placeholder="clima"
           style={ESTILOS.input}
           value={ingr3}
           onChangeText={(texto) => defIngr3(texto)}
         />
         <TextInput
-          placeholder="Ingrediente 4"
+          placeholder="lugares agitados ou tranquilos"
           style={ESTILOS.input}
           value={ingr4}
           onChangeText={(texto) => defIngr4(texto)}
-        />
-        <TextInput
-          placeholder="Almoço ou Jantar"
-          style={ESTILOS.input}
-          value={ocasiao}
-          onChangeText={(texto) => defOcasiao(texto)}
         />
       </View>
 
